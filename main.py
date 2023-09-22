@@ -30,16 +30,20 @@ get_day_id = date_now.weekday()
 get_month = date_now.strftime('%B')
 # month id
 get_month_id = date_now.month
+# hour & minute
+time = datetime.now().strftime("%H:%M")
+# jalali date (1402/1/1)
+jalali_date = date_now.strftime("%Y/%m/%d")
     
   
-# get input from user
+# get inputs from user
 res = question_Box('save or cost? (save/cost) ', q1=['s','save'], q2=['c','cost'])
+money = int(input("enter amount of money ? "))
+log_decs = input("enter description : ")
+
+
 
 if res == 1 :
-    time = datetime.now().strftime("%H:%M")
-    jalali_date = JalaliDate.today().strftime("%Y/%m/%d")
-    money = int(input("enter amount of money ? "))
-    log_decs = input("enter description : ")
     query = ((df['save']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
     # check if row exist in db or not
     if(query.any()):
