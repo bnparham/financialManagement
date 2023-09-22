@@ -2,6 +2,7 @@ from persiantools.jdatetime import JalaliDate
 import pandas as pd
 import math
 from openpyxl import load_workbook
+from datetime import datetime
 
 
 FILE_PATH = 'Financial-1402-1.xlsx'
@@ -56,6 +57,8 @@ def question_Box(message, q1:list=['y'], q2:list=['n']):
 res = question_Box('save or cost? (save/cost) ', q1=['s','save'], q2=['c','cost'])
 
 if res == 1 :
+    time = datetime.now().strftime("%H:%M")
+    jalali_date = JalaliDate.today().strftime("%Y/%m/%d")
     money = int(input("enter amount of money ? "))
     log_decs = input("enter description : ")
     query = ((df['save']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
@@ -76,7 +79,12 @@ if res == 1 :
                 # write data to the excel 'save' sheet
                 df['save'].to_excel(writer, sheet_name='save', index=False)
                 # save log to the excel 'save_log' sheet
-                log_obj = pd.DataFrame([{'save_id' : id, 'desc':log_decs, 'amount':money}])
+                log_obj = pd.DataFrame([{
+                    'save_id' : id, 
+                    'desc':log_decs, 
+                    'amount':money,
+                    'time':time
+                    }])
                 new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
                 new_log.to_excel(writer, sheet_name='save_log', index=False)
     else:
@@ -87,7 +95,8 @@ if res == 1 :
                 'week_id':week_of_month,
                 'day_id':get_day_id,
                 'day':date_now.day,
-                'sum':money
+                'sum':money,
+                'date':jalali_date
                 }
         data = pd.DataFrame([data])
         # join new row to existing table
@@ -99,7 +108,12 @@ if res == 1 :
                 # write data to the excel 'save' sheet
                 new_save.to_excel(writer, sheet_name='save', index=False)
                 # save log to the excel 'save_log' sheet
-                log_obj = pd.DataFrame([{'save_id':id, 'desc':log_decs, 'amount':money}])
+                log_obj = pd.DataFrame([{
+                    'save_id' : id, 
+                    'desc':log_decs, 
+                    'amount':money,
+                    'time':time
+                    }])
                 new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
                 new_log.to_excel(writer, sheet_name='save_log', index=False)
         else:
