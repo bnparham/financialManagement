@@ -69,10 +69,7 @@ if res == 1 :
         )
         # confirm add money or not
         confirm_save_db(
-            money= money,
-            get_day= get_day,
-            now_day = date_now.day,
-            get_month= get_month,
+            message=f"Are You sure add {money} toman to save at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
             pd= pd,
             FILE_PATH= FILE_PATH,
             db= df['save'],
@@ -81,6 +78,7 @@ if res == 1 :
             log_sheet= 'save_log'
         )
     else:
+        # there is not any save data yet for today
         id = len(df['save'])
         # new save db
         new_save = new_df_api(
@@ -109,10 +107,7 @@ if res == 1 :
         )
         # confirm add money or not
         confirm_save_db(
-            money= money,
-            get_day= get_day,
-            now_day = date_now.day,
-            get_month= get_month,
+            message=f"Are You sure add {money} toman to save at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
             pd= pd,
             FILE_PATH= FILE_PATH,
             db = new_save,
@@ -125,13 +120,71 @@ else :
     query = ((df['cost']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
     # check if row exist in db or not
     if(query.any()):
-        pass
+        # find exist row in table
+        row = df['cost'][query]
+        # find save_id
+        id = row['id'][0]
+        # find sum and plus to money input
+        row['sum'] += money
+        # updare save data frame
+        df['cost'][query] = row
+        
+        # new log db  
+        new_log = new_df_api(
+            obj={
+            'cost_id' : id, 
+            'desc':log_decs, 
+            'amount':money,
+            'time':time
+            }, 
+            pd=pd, 
+            dataFrame=df['cost_log']
+        )
+        # confirm add money or not
+        confirm_save_db(
+            message=f"Are You sure add {money} toman to cost at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
+            pd= pd,
+            FILE_PATH= FILE_PATH,
+            db= df['cost'],
+            log= new_log,
+            db_sheet= 'cost',
+            log_sheet= 'cost_log'
+        )
     else:
-        money = input("enter amount of money ? ")
-        data = {
+        # there is not any cost data yet for today
+        id = len(df['cost'])
+        # new save db
+        new_cost = new_df_api(
+            obj={
+                'id': id,
                 'month_id':get_month_id,
                 'week_id':week_of_month,
                 'day_id':get_day_id,
                 'day':date_now.day,
-                'sum':money
-                }
+                'sum':money,
+                'date':jalali_date
+                },
+            pd=pd,
+            dataFrame=df['cost']
+        )
+        # new log db
+        new_log = new_df_api(
+            obj={
+            'cost_id' : id, 
+            'desc':log_decs, 
+            'amount':money,
+            'time':time
+            }, 
+            pd=pd, 
+            dataFrame=df['cost_log']
+        )
+        # confirm add money or not
+        confirm_save_db(
+            message=f"Are You sure add {money} toman to cost at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
+            pd= pd,
+            FILE_PATH= FILE_PATH,
+            db = new_cost,
+            log = new_log,
+            db_sheet= 'cost',
+            log_sheet= 'cost_log'
+        )

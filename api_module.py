@@ -15,8 +15,8 @@ def question_Box(message, q1:list=['y'], q2:list=['n']):
         except:
             continue
         
-def confirm_save_db(*args, **kwargs):
-    confirm = question_Box(f"Are You sure add {kwargs['money']} toman to save at {kwargs['get_day']} {kwargs['now_day']} {kwargs['get_month']}? (yes/no) ", q1=['yes','y'], q2=['no','n'])
+def confirm_save_db(message, *args, **kwargs):
+    confirm = question_Box(message)
     if confirm == 1:
         with kwargs['pd'].ExcelWriter(kwargs['FILE_PATH'], engine='openpyxl', mode='a', if_sheet_exists='replace') as writer :
             # write data to the excel 'save' sheet
