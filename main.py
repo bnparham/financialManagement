@@ -6,6 +6,7 @@ from datetime import datetime
 
 # custom modules
 from api_module import *
+from components import *
 
 FILE_PATH = 'Financial-1402-1.xlsx'
 
@@ -47,35 +48,20 @@ if res == 1 :
     query = ((df['save']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
     # check if row exist in db or not
     if(query.any()):
-        # find exist row in table
-        row = df['save'][query]
-        # find save_id
-        id = row['id'][0]
-        # find sum and plus to money input
-        row['sum'] += money
-        # updare save data frame
-        df['save'][query] = row
-        
-        # new log db  
-        new_log = new_df_api(
-            obj={
-            'save_id' : id, 
-            'desc':log_decs, 
-            'amount':money,
-            'time':time
-            }, 
-            pd=pd, 
-            dataFrame=df['save_log']
-        )
-        # confirm add money or not
-        confirm_save_db(
-            message=f"Are You sure add {money} toman to save at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
-            pd= pd,
-            FILE_PATH= FILE_PATH,
-            db= df['save'],
-            log= new_log,
-            db_sheet= 'save',
-            log_sheet= 'save_log'
+        update_db(
+            db=df['save'],
+            log=df['save_log'],
+            query=query,
+            db_sheet_name='save',
+            log_sheet_name='save_log',
+            money = money,
+            time = time,
+            log_decs = log_decs,
+            FILE_PATH = FILE_PATH,
+            get_day = get_day,
+            get_month = get_month,
+            today = date_now.day,
+            pd = pd,
         )
     else:
         # there is not any save data yet for today
@@ -120,35 +106,20 @@ else :
     query = ((df['cost']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
     # check if row exist in db or not
     if(query.any()):
-        # find exist row in table
-        row = df['cost'][query]
-        # find save_id
-        id = row['id'][0]
-        # find sum and plus to money input
-        row['sum'] += money
-        # updare save data frame
-        df['cost'][query] = row
-        
-        # new log db  
-        new_log = new_df_api(
-            obj={
-            'cost_id' : id, 
-            'desc':log_decs, 
-            'amount':money,
-            'time':time
-            }, 
-            pd=pd, 
-            dataFrame=df['cost_log']
-        )
-        # confirm add money or not
-        confirm_save_db(
-            message=f"Are You sure add {money} toman to cost at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
-            pd= pd,
-            FILE_PATH= FILE_PATH,
-            db= df['cost'],
-            log= new_log,
-            db_sheet= 'cost',
-            log_sheet= 'cost_log'
+        update_db(
+            db=df['cost'],
+            log=df['cost_log'],
+            query=query,
+            db_sheet_name='cost',
+            log_sheet_name='cost_log',
+            money = money,
+            time = time,
+            log_decs = log_decs,
+            FILE_PATH = FILE_PATH,
+            get_day = get_day,
+            get_month = get_month,
+            today = date_now.day,
+            pd = pd,
         )
     else:
         # there is not any cost data yet for today
