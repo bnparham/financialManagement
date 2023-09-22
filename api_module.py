@@ -25,3 +25,9 @@ def confirm_save_db(*args, **kwargs):
             kwargs['log'].to_excel(writer, sheet_name=kwargs['log_sheet'], index=False)
     else:
         print("operation stopped !")
+        
+        
+def new_df_api(obj ,*args, **kwargs):
+    obj = kwargs['pd'].DataFrame([obj])
+    df = kwargs['pd'].concat([kwargs['dataFrame'],obj], ignore_index=True)
+    return df

@@ -59,14 +59,17 @@ if res == 1 :
         # updare save data frame
         df['save'][query] = row
         
-        log_obj = pd.DataFrame([{
+        # new log db  
+        new_log = new_df_api(
+            obj={
             'save_id' : id, 
             'desc':log_decs, 
             'amount':money,
             'time':time
-            }])
-        new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
-        
+            }, 
+            pd=pd, 
+            dataFrame=df['save_log']
+        )
         # confirm add money or not
         confirm_save_db(
             money= money,
@@ -82,8 +85,9 @@ if res == 1 :
         )
     else:
         id = len(df['save'])
-        # new date
-        data = {
+        # new save db
+        new_save = new_df_api(
+            obj={
                 'id': id,
                 'month_id':get_month_id,
                 'week_id':week_of_month,
@@ -91,21 +95,21 @@ if res == 1 :
                 'day':date_now.day,
                 'sum':money,
                 'date':jalali_date
-                }
-        data = pd.DataFrame([data])
-        # join new row to existing table
-        new_save = pd.concat([df['save'],data], ignore_index=True)
-        
-        # new log
-        log_obj = pd.DataFrame([{
+                },
+            pd=pd,
+            dataFrame=df['save']
+        )
+        # new log db
+        new_log = new_df_api(
+            obj={
             'save_id' : id, 
             'desc':log_decs, 
             'amount':money,
             'time':time
-            }])
-        # join log row to existing table
-        new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
-        
+            }, 
+            pd=pd, 
+            dataFrame=df['save_log']
+        )
         # confirm add money or not
         confirm_save_db(
             money= money,
@@ -114,8 +118,8 @@ if res == 1 :
             get_month= get_month,
             pd= pd,
             FILE_PATH= FILE_PATH,
-            db= df['save'],
-            log= new_log,
+            db = new_save,
+            log = new_log,
             db_sheet= 'save',
             log_sheet= 'save_log'
         )
