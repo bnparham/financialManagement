@@ -46,6 +46,7 @@ log_decs = input("enter description : ")
 
 if res == 1 :
     query = ((df['save']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
+    print(query)
     # check if row exist in db or not
     if(query.any()):
         update_db(
@@ -79,14 +80,14 @@ if res == 1 :
             get_month = get_month,
             today = date_now.day,
             pd = pd,
-            get_month_id = get_day_id,
+            get_month_id = get_month_id,
             week_of_month = week_of_month,
             get_day_id = get_day_id,
             jalali_date = jalali_date,
         )
 # todo
 else :
-    query = ((df['cost']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
+    query = ((df['cost']['month_id'] == get_month_id) & (df['cost']['day'] == date_now.day))
     # check if row exist in db or not
     if(query.any()):
         update_db(
@@ -120,7 +121,7 @@ else :
             get_month = get_month,
             today = date_now.day,
             pd = pd,
-            get_month_id = get_day_id,
+            get_month_id = get_month_id,
             week_of_month = week_of_month,
             get_day_id = get_day_id,
             jalali_date = jalali_date,

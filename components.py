@@ -21,7 +21,7 @@ def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # new log db
     new_log = new_df_api(
         obj={
-        'save_id' : id, 
+        f'{db_sheet_name}_id' : id, 
         'desc':kwargs['log_decs'], 
         'amount':kwargs['money'],
         'time':kwargs['time']
