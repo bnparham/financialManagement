@@ -46,7 +46,6 @@ log_decs = input("enter description : ")
 
 if res == 1 :
     query = ((df['save']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
-    print(query)
     # check if row exist in db or not
     if(query.any()):
         update_db(
