@@ -56,15 +56,33 @@ def question_Box(message, q1:list=['y'], q2:list=['n']):
 res = question_Box('save or cost? (save/cost) ', q1=['s','save'], q2=['c','cost'])
 
 if res == 1 :
-    money = input("enter amount of money ? ")
+    money = int(input("enter amount of money ? "))
     log_decs = input("enter description : ")
     query = ((df['save']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
     # check if row exist in db or not
     if(query.any()):
-        # todo
-        print("yes")
+        # find exist row in table
+        row = df['save'][query]
+        # find save_id
+        id = row['id'][0]
+        # find sum and plus to money input
+        row['sum'] += money
+        # updare save data frame
+        df['save'][query] = row
+        
+        confirm = question_Box(f"Are You sure add {money} toman to save at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'])
+        if confirm == 1:
+            with pd.ExcelWriter(FILE_PATH, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer :
+                # write data to the excel 'save' sheet
+                df['save'].to_excel(writer, sheet_name='save', index=False)
+                # save log to the excel 'save_log' sheet
+                log_obj = pd.DataFrame([{'save_id' : id, 'desc':log_decs, 'amount':money}])
+                new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
+                new_log.to_excel(writer, sheet_name='save_log', index=False)
     else:
+        id = len(df['save'])
         data = {
+                'id': id,
                 'month_id':get_month_id,
                 'week_id':week_of_month,
                 'day_id':get_day_id,
@@ -72,8 +90,6 @@ if res == 1 :
                 'sum':money
                 }
         data = pd.DataFrame([data])
-        id = len(df['save'])
-        
         # join new row to existing table
         new_save = pd.concat([df['save'],data], ignore_index=True)
         # confirm add money or not
@@ -83,7 +99,7 @@ if res == 1 :
                 # write data to the excel 'save' sheet
                 new_save.to_excel(writer, sheet_name='save', index=False)
                 # save log to the excel 'save_log' sheet
-                log_obj = pd.DataFrame([{'save_id' : id, 'desc':log_decs}])
+                log_obj = pd.DataFrame([{'save_id':id, 'desc':log_decs, 'amount':money}])
                 new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
                 new_log.to_excel(writer, sheet_name='save_log', index=False)
         else:
