@@ -4,6 +4,8 @@ import math
 from openpyxl import load_workbook
 from datetime import datetime
 
+# custom modules
+from api_module import *
 
 FILE_PATH = 'Financial-1402-1.xlsx'
 
@@ -34,22 +36,6 @@ get_month_id = date_now.month
 # get_month_id = 10
 
 
-# api for user input
-def question_Box(message, q1:list=['y'], q2:list=['n']):
-    flag = True
-    while(flag):      
-        q = input(f"{message}").lower()
-        try:
-            if q in q1:
-                flag = False
-                return 1
-            elif q in q2:
-                flag = False
-                return 2
-            else :
-                continue
-        except:
-            continue
         
 # cell 4
   
@@ -73,22 +59,30 @@ if res == 1 :
         # updare save data frame
         df['save'][query] = row
         
-        confirm = question_Box(f"Are You sure add {money} toman to save at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'])
-        if confirm == 1:
-            with pd.ExcelWriter(FILE_PATH, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer :
-                # write data to the excel 'save' sheet
-                df['save'].to_excel(writer, sheet_name='save', index=False)
-                # save log to the excel 'save_log' sheet
-                log_obj = pd.DataFrame([{
-                    'save_id' : id, 
-                    'desc':log_decs, 
-                    'amount':money,
-                    'time':time
-                    }])
-                new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
-                new_log.to_excel(writer, sheet_name='save_log', index=False)
+        log_obj = pd.DataFrame([{
+            'save_id' : id, 
+            'desc':log_decs, 
+            'amount':money,
+            'time':time
+            }])
+        new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
+        
+        # confirm add money or not
+        confirm_save_db(
+            money= money,
+            get_day= get_day,
+            now_day = date_now.day,
+            get_month= get_month,
+            pd= pd,
+            FILE_PATH= FILE_PATH,
+            db= df['save'],
+            log= new_log,
+            db_sheet= 'save',
+            log_sheet= 'save_log'
+        )
     else:
         id = len(df['save'])
+        # new date
         data = {
                 'id': id,
                 'month_id':get_month_id,
@@ -101,23 +95,30 @@ if res == 1 :
         data = pd.DataFrame([data])
         # join new row to existing table
         new_save = pd.concat([df['save'],data], ignore_index=True)
+        
+        # new log
+        log_obj = pd.DataFrame([{
+            'save_id' : id, 
+            'desc':log_decs, 
+            'amount':money,
+            'time':time
+            }])
+        # join log row to existing table
+        new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
+        
         # confirm add money or not
-        confirm = question_Box(f"Are You sure add {money} toman to save at {get_day} {date_now.day} {get_month}? (yes/no) ", q1=['yes','y'], q2=['no','n'])
-        if confirm == 1:
-            with pd.ExcelWriter(FILE_PATH, engine='openpyxl', mode='a', if_sheet_exists='replace') as writer :
-                # write data to the excel 'save' sheet
-                new_save.to_excel(writer, sheet_name='save', index=False)
-                # save log to the excel 'save_log' sheet
-                log_obj = pd.DataFrame([{
-                    'save_id' : id, 
-                    'desc':log_decs, 
-                    'amount':money,
-                    'time':time
-                    }])
-                new_log = pd.concat([df['save_log'],log_obj], ignore_index=True)
-                new_log.to_excel(writer, sheet_name='save_log', index=False)
-        else:
-            print("operation stopped !")
+        confirm_save_db(
+            money= money,
+            get_day= get_day,
+            now_day = date_now.day,
+            get_month= get_month,
+            pd= pd,
+            FILE_PATH= FILE_PATH,
+            db= df['save'],
+            log= new_log,
+            db_sheet= 'save',
+            log_sheet= 'save_log'
+        )
 # todo
 else :
     query = ((df['cost']['month_id'] == get_month_id) & (df['save']['day'] == date_now.day))
