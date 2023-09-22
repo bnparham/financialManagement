@@ -9,14 +9,13 @@ from api_module import *
 
 FILE_PATH = 'Financial-1402-1.xlsx'
 
-# cell 2
+
 sheet = {'cost':2, 'cost_log':3, 'save':0, 'save_log':1}
 df = {}
 for key in sheet:
     df[key] = pd.read_excel(FILE_PATH, sheet_name=sheet[key])
 
 
-# cell 3
 # get date now
 date_now = JalaliDate.today()
 
@@ -31,13 +30,7 @@ get_day_id = date_now.weekday()
 get_month = date_now.strftime('%B')
 # month id
 get_month_id = date_now.month
-
-#todo: Example month id
-# get_month_id = 10
-
-
-        
-# cell 4
+    
   
 # get input from user
 res = question_Box('save or cost? (save/cost) ', q1=['s','save'], q2=['c','cost'])
