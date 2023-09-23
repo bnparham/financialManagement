@@ -11,7 +11,7 @@ from components import *
 FILE_PATH = 'Financial-1402-1.xlsx'
 
 
-sheet = {'cost':2, 'cost_log':3, 'save':0, 'save_log':1}
+sheet = {'cost':2, 'cost_log':3, 'save':0, 'save_log':1, 'total':4}
 df = {}
 for key in sheet:
     df[key] = pd.read_excel(FILE_PATH, sheet_name=sheet[key])
@@ -35,6 +35,8 @@ get_month_id = date_now.month
 time = datetime.now().strftime("%H:%M")
 # jalali date (1402/1/1)
 jalali_date = date_now.strftime("%Y/%m/%d")
+# year
+year = date_now.year
     
   
 # get inputs from user
@@ -62,6 +64,9 @@ if res == 1 :
             get_month = get_month,
             today = date_now.day,
             pd = pd,
+            df_total = df['total'],
+            get_month_id = get_month_id,
+            year = year,
         )
     else:
         # there is not any save data yet for today
@@ -83,6 +88,8 @@ if res == 1 :
             week_of_month = week_of_month,
             get_day_id = get_day_id,
             jalali_date = jalali_date,
+            df_total = df['total'],
+            year = year,
         )
 # todo
 else :
@@ -103,6 +110,9 @@ else :
             get_month = get_month,
             today = date_now.day,
             pd = pd,
+            df_total = df['total'],
+            get_month_id = get_month_id,
+            year = year,
         )
     else:
         # there is not any cost data yet for today
@@ -124,4 +134,6 @@ else :
             week_of_month = week_of_month,
             get_day_id = get_day_id,
             jalali_date = jalali_date,
+            df_total = df['total'],
+            year = year,
         )

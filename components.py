@@ -32,7 +32,7 @@ def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
         dataFrame=log
     )
     # confirm add money or not
-    confirm_save_db(
+    confirm = confirm_save_db(
         message=f"Are You sure add {kwargs['money']} toman to {db_sheet_name} at {kwargs['get_day']} {kwargs['today']} {kwargs['get_month']}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
         pd= kwargs['pd'],
         FILE_PATH= kwargs['FILE_PATH'],
@@ -41,6 +41,17 @@ def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
         db_sheet= db_sheet_name,
         log_sheet= log_sheet_name
     )
+    if(confirm):
+        update_total_table(
+            db = db,
+            db_sheet = db_sheet_name,
+            sum = kwargs['money'],
+            df_total = kwargs['df_total'],
+            pd = kwargs['pd'],
+            FILE_PATH= kwargs['FILE_PATH'],
+            get_month_id = kwargs['get_month_id'],
+            year = kwargs['year'],
+        )
 
 def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # find exist row in table
@@ -50,7 +61,7 @@ def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     log_id = len(log)
     # find sum and plus to money input
     row['sum'] += kwargs['money']
-    # updare save data frame
+    # upgrade data frame
     db[query] = row
     
     # new log db  
@@ -66,7 +77,7 @@ def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
         dataFrame=log
        )
     # confirm add money or not
-    confirm_save_db(
+    confirm = confirm_save_db(
         message=f"Are You sure add {kwargs['money']} toman to {db_sheet_name} at {kwargs['get_day']} {kwargs['today']} {kwargs['get_month']}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
         pd= kwargs['pd'],
         FILE_PATH= kwargs['FILE_PATH'],
@@ -75,3 +86,14 @@ def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
         db_sheet= db_sheet_name,
         log_sheet= log_sheet_name
     )
+    if(confirm):
+        update_total_table(
+            db = db,
+            db_sheet = db_sheet_name,
+            sum = kwargs['money'],
+            df_total = kwargs['df_total'],
+            pd = kwargs['pd'],
+            FILE_PATH= kwargs['FILE_PATH'],
+            get_month_id = kwargs['get_month_id'],
+            year = kwargs['year'],
+        )
