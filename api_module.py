@@ -43,7 +43,7 @@ def new_df_api(obj ,*args, **kwargs):
     return df
 
 # this method update total sheet in database
-def update_total_table(db, db_sheet ,df_total, sum, *args, **kwargs):
+def update_total_table(db, db_sheet ,df_total, *args, **kwargs):
     id = len(df_total)
     # query to find row
     query = df_total['month_id'] == kwargs['get_month_id']
@@ -53,7 +53,7 @@ def update_total_table(db, db_sheet ,df_total, sum, *args, **kwargs):
         # find row in total table with month id
         row = df_total[query]
         # update (save or cost) value
-        row[db_sheet] = total_value + sum
+        row[db_sheet] = total_value
         # upgdare data frame
         df_total[query] = row
         # save in database
@@ -69,7 +69,7 @@ def update_total_table(db, db_sheet ,df_total, sum, *args, **kwargs):
             'id':id,
              'month_id': kwargs['get_month_id'],
              'year': kwargs['year'],
-             f'{db_sheet}':total_value + sum,
+             f'{db_sheet}':total_value,
              },
             pd = kwargs['pd'],
             dataFrame = df_total,
