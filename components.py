@@ -45,8 +45,9 @@ def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
 def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # find exist row in table
     row = db[query]
-    # find save_id
-    id = row['id'][0]
+    # find db_id
+    db_id = row['id'][0]
+    log_id = len(log)
     # find sum and plus to money input
     row['sum'] += kwargs['money']
     # updare save data frame
@@ -55,14 +56,15 @@ def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # new log db  
     new_log = new_df_api(
         obj={
-        f'{db_sheet_name}_id' : id, 
+        'id':log_id,
+        f'{db_sheet_name}_id' : db_id, 
         'desc':kwargs['log_decs'], 
         'amount':kwargs['money'],
         'time':kwargs['time']
         }, 
         pd=kwargs['pd'], 
         dataFrame=log
-    )
+       )
     # confirm add money or not
     confirm_save_db(
         message=f"Are You sure add {kwargs['money']} toman to {db_sheet_name} at {kwargs['get_day']} {kwargs['today']} {kwargs['get_month']}? (yes/no) ", q1=['yes','y'], q2=['no','n'],
