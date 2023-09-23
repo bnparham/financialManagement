@@ -3,11 +3,12 @@ from api_module import *
 
 def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # there is not any save data yet for today
-    id = len(db)
+    db_id = len(db)
+    log_id = len(log)
     # new save db
     new_save = new_df_api(
         obj={
-            'id': id,
+            'id': db_id,
             'month_id':kwargs['get_month_id'],
             'week_id':kwargs['week_of_month'],
             'day_id':kwargs['get_day_id'],
@@ -21,7 +22,8 @@ def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # new log db
     new_log = new_df_api(
         obj={
-        f'{db_sheet_name}_id' : id, 
+        'id':log_id,
+        f'{db_sheet_name}_id' : db_id, 
         'desc':kwargs['log_decs'], 
         'amount':kwargs['money'],
         'time':kwargs['time']
