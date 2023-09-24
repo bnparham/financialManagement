@@ -11,11 +11,16 @@ from components import *
 FILE_PATH = 'Financial-1402-1.xlsx'
 
 
-sheet = {'cost':2, 'cost_log':3, 'save':0, 'save_log':1, 'total':4}
-df = {}
-for key in sheet:
-    df[key] = pd.read_excel(FILE_PATH, sheet_name=sheet[key])
 
+
+def SELECT_TABLE():
+    sheet = {'cost':2, 'cost_log':3, 'save':0, 'save_log':1, 'total':4}
+    df = {}
+    for key in sheet:
+        df[key] = pd.read_excel(FILE_PATH, sheet_name=sheet[key])
+    return df
+
+df = SELECT_TABLE()
 
 # get date now
 date_now = JalaliDate.today()
@@ -67,6 +72,7 @@ if res == 1 :
             df_total = df['total'],
             get_month_id = get_month_id,
             year = year,
+            SELECT_TABLE_func = SELECT_TABLE
         )
     else:
         # there is not any save data yet for today
@@ -90,6 +96,8 @@ if res == 1 :
             jalali_date = jalali_date,
             df_total = df['total'],
             year = year,
+            SELECT_TABLE_func = SELECT_TABLE
+            
         )
 # todo
 else :
@@ -113,6 +121,8 @@ else :
             df_total = df['total'],
             get_month_id = get_month_id,
             year = year,
+            SELECT_TABLE_func = SELECT_TABLE
+            
         )
     else:
         # there is not any cost data yet for today
@@ -136,4 +146,5 @@ else :
             jalali_date = jalali_date,
             df_total = df['total'],
             year = year,
+            SELECT_TABLE_func = SELECT_TABLE
         )

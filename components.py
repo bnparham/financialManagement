@@ -42,11 +42,13 @@ def create_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
         log_sheet= log_sheet_name
     )
     if(confirm):
+        # get Tables after updating Database
+        df = kwargs['SELECT_TABLE_func']()
         update_total_table(
-            db = db,
+            db = df[db_sheet_name],
             db_sheet = db_sheet_name,
             sum = kwargs['money'],
-            df_total = kwargs['df_total'],
+            df_total = df['total'],
             pd = kwargs['pd'],
             FILE_PATH= kwargs['FILE_PATH'],
             get_month_id = kwargs['get_month_id'],
@@ -87,11 +89,13 @@ def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
         log_sheet= log_sheet_name
     )
     if(confirm):
+        # get Tables after updating Database
+        df = kwargs['SELECT_TABLE_func']()
         update_total_table(
-            db = db,
+            db = df[db_sheet_name],
             db_sheet = db_sheet_name,
             sum = kwargs['money'],
-            df_total = kwargs['df_total'],
+            df_total = df['total'],
             pd = kwargs['pd'],
             FILE_PATH= kwargs['FILE_PATH'],
             get_month_id = kwargs['get_month_id'],
