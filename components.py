@@ -59,7 +59,7 @@ def update_db(db, log, db_sheet_name, log_sheet_name, query, *args, **kwargs):
     # find exist row in table
     row = db[query]
     # find db_id
-    db_id = row['id'][0]
+    db_id = [i for i in row['id']][0]
     log_id = len(log)
     # find sum and plus to money input
     row['sum'] += kwargs['money']
