@@ -26,7 +26,6 @@ def SELECT_TABLE():
         df[key] = pd.read_excel(FILE_PATH, sheet_name=sheet[key])
     return df
 
-
   
 
 def program(res,money,log_decs):
