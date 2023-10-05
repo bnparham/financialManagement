@@ -22,7 +22,7 @@ Before running the project, make sure you have the following packages installed:
 
 ## Project Structure
 
--   **main**: This is the main file of the project. It handles user input and calculates the current date and time.
+-   **project**: This is the main file of the project. It handles user input and calculates the current date and time.
     
 -   **component**: In this file, you'll find two methods for updating existing records and creating new records for each day. These methods play a crucial role in managing financial data.
     
@@ -35,7 +35,7 @@ To get started with this project, follow these steps:
 
 1.  Clone the repository to your local machine.
     
-2.  Open and run `main.py` to launch the application.
+2.  Open and run `project.py` to launch the application.
     
 3.  Use the user-friendly interface to input your financial data, update records, and create new entries.
     
