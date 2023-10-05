@@ -4,6 +4,8 @@
 
 This Python financial project includes cost and savings tables, as well as log tables for each of them. It is designed to help users manage their financial data effectively.
 
+#### Video Demo:  https://www.youtube.com/watch?v=VwJ3GPu1FcU
+
 ## Installation
 
 Before running the project, make sure you have the following packages installed:
